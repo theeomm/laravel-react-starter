@@ -14,6 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+// User Auth Routes
+Route::namespace('Auth')->prefix('auth')->group(function () {
+    Route::post('/login', 'LoginController@login');
+    Route::post('/register', 'RegisterController@register');
+    // Require Authenticated User
+    Route::middleware('auth:sanctum')->group(function () {
+        // Get current user
+        Route::get('/user', function (Request $request) {
+            return $request->user();
+        });
+        // Logout user
+        Route::post('logout', 'LoginController@logout');
+    });
 });
